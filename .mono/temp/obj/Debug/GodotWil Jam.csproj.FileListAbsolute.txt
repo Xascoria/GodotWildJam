@@ -1,0 +1,8 @@
+D:\Godot\projects\GodotWildJam\.mono\temp\bin\Debug\GodotWil Jam.dll
+D:\Godot\projects\GodotWildJam\.mono\temp\bin\Debug\GodotWil Jam.pdb
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.csprojAssemblyReference.cache
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.AssemblyInfoInputs.cache
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.AssemblyInfo.cs
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.csproj.CoreCompileInputs.cache
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.dll
+D:\Godot\projects\GodotWildJam\.mono\temp\obj\Debug\GodotWil Jam.pdb

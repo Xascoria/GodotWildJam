@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Scene_Display/Board.cs" type="Script" id=1]
+[ext_resource path="res://Resources/globe.png" type="Texture" id=2]
+[ext_resource path="res://Scene_Display/Display.cs" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://Resources/VT323-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+font_data = SubResource( 2 )
+
+[node name="Display" type="Panel"]
+margin_right = 616.0
+margin_bottom = 688.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" type="Sprite" parent="."]
+modulate = Color( 0.815686, 0.815686, 0.815686, 1 )
+position = Vector2( 32, 16 )
+scale = Vector2( 0.072, 0.072 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="TargetsLeft" type="Label" parent="."]
+margin_left = 40.0
+margin_top = 96.0
+margin_right = 576.0
+margin_bottom = 128.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.815686, 0.815686, 0.815686, 1 )
+text = "Target(s) Left: 5"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Board" type="Control" parent="."]
+anchor_left = 0.065
+anchor_top = 0.174
+anchor_right = 0.935
+anchor_bottom = 0.953
+margin_left = -0.0399971
+margin_top = 8.288
+margin_right = 0.039978
+margin_bottom = 8.336
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

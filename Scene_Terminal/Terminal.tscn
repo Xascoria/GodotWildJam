@@ -1,0 +1,103 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Scene_Terminal/Terminal.cs" type="Script" id=1]
+[ext_resource path="res://Scene_Terminal/CPU.cs" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://Resources/VT323-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+extra_spacing_bottom = -2
+font_data = SubResource( 2 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="DynamicFont" id=7]
+size = 24
+font_data = SubResource( 2 )
+
+[node name="Terminal" type="Panel"]
+margin_right = 616.0
+margin_bottom = 688.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Output" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 608.0
+margin_bottom = 636.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.8, 0.8, 0.8, 1 )
+text = "1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="Output"]
+
+[node name="Input" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 644.0
+margin_right = 608.0
+margin_bottom = 679.0
+focus_mode = 1
+custom_styles/read_only = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0.800781, 0.800781, 0.800781, 1 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CPU" type="Node" parent="."]
+script = ExtResource( 2 )
+[connection signal="tween_all_completed" from="Output/Tween" to="." method="_on_Tween_tween_all_completed"]
+[connection signal="text_entered" from="Input" to="." method="_on_Input_text_entered"]
