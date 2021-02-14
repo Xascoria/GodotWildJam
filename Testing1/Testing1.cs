@@ -13,4 +13,12 @@ public class Testing1 : Node2D
 			GD.Print(str);
 		}
 	}
+
+	/*
+	Guinea coup d'etat
+	Argentinian civil war
+	Indonesian uprising
+	South African War - Boer Uprising
+	American Civil War
+	*/
 }

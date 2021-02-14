@@ -8,13 +8,12 @@ public class Board : Control
 	private int[][] target_counts;
 	private bool[][] revealed;
 	private PackedScene tile_ref = GD.Load<PackedScene>("res://Scene_Display/Tile.tscn");
-
 	public override void _Ready()
 	{
 		width_height = (int) RectSize.x;
 
 		//TODO: Testing
-		SetupGridMap(11);
+		//SetupGridMap(11);
 	}
 
 	public void SetupGridMap(int dimension)

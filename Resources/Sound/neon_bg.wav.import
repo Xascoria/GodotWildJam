@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/neon_bg.wav-44574d70c12f9de2179e56e03bbf40ad.sample"
+
+[deps]
+
+source_file="res://Resources/Sound/neon_bg.wav"
+dest_files=[ "res://.import/neon_bg.wav-44574d70c12f9de2179e56e03bbf40ad.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=true
+compress/mode=0

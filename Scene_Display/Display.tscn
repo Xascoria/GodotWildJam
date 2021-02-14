@@ -11,26 +11,26 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 
-[sub_resource type="DynamicFontData" id=4]
+[sub_resource type="DynamicFontData" id=2]
 antialiased = false
 font_path = "res://Resources/VT323-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=3]
 size = 36
 use_mipmaps = true
-font_data = SubResource( 4 )
+font_data = SubResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=4]
 size = 21
 use_mipmaps = true
-font_data = SubResource( 4 )
+font_data = SubResource( 2 )
 
-[sub_resource type="DynamicFontData" id=2]
+[sub_resource type="DynamicFontData" id=5]
 font_path = "res://Resources/VT323-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=6]
 size = 24
-font_data = SubResource( 2 )
+font_data = SubResource( 5 )
 
 [node name="Display" type="Panel"]
 margin_right = 616.0
@@ -56,7 +56,7 @@ margin_left = 120.0
 margin_top = 20.0
 margin_right = 512.0
 margin_bottom = 57.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0.8, 0.8, 0.815686, 1 )
 text = "Organization of Free Nations"
 __meta__ = {
@@ -68,7 +68,7 @@ margin_left = 120.0
 margin_top = 60.0
 margin_right = 512.0
 margin_bottom = 84.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.8, 0.8, 0.815686, 1 )
 text = "Washington D.C. Operations"
 __meta__ = {
@@ -80,7 +80,7 @@ margin_left = 40.0
 margin_top = 96.0
 margin_right = 576.0
 margin_bottom = 128.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0.815686, 0.815686, 0.815686, 1 )
 text = "Target(s) Left: 5"
 valign = 1

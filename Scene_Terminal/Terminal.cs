@@ -12,7 +12,7 @@ public class Terminal : Panel
 	private bool story_special_input = false;
 
 	private Label output;
-	private LineEdit input;
+	public LineEdit input;
 	private Tween text_tween;
 	public CPU cpu;
 
@@ -64,7 +64,7 @@ public class Terminal : Panel
 			output.Text = output.Text.Substring(index + 1);
 			output.Text += "\n" + new_line;
 		}
-		output.VisibleCharacters = output.Text.Length;
+		output.VisibleCharacters = LengthWithoutSpace(output.Text);
 	}
 
 	public void AddScrollingLine(string new_line, double pause_before_load = 0)
@@ -91,14 +91,14 @@ public class Terminal : Panel
 				index += 1;
 			}
 			output.Text = output.Text.Substring(index + 1);
-			output.VisibleCharacters = output.Text.Length;
+			output.VisibleCharacters = LengthWithoutSpace(output.Text);
 			output.Text += "\n" + new_line;
 		}
-		double new_text_len = output.Text.Length - output.VisibleCharacters;
+		double new_text_len = LengthWithoutSpace(new_line);
 		Tween.TransitionType tr = Tween.TransitionType.Linear;
 		Tween.EaseType et = Tween.EaseType.InOut;
 		text_tween.InterpolateProperty(
-			output, "visible_characters", output.VisibleCharacters, output.Text.Length, (float) new_text_len/char_per_sec,
+			output, "visible_characters", output.VisibleCharacters, LengthWithoutSpace(output.Text), (float) new_text_len/char_per_sec,
 			tr, et, (float) pause_before_load
 		);
 		text_tween.Start();
@@ -132,7 +132,18 @@ public class Terminal : Panel
 	private void _on_Tween_tween_all_completed()
 	{
 		is_animating = false;
+		text_tween.StopAll();
 		EmitSignal(nameof(FinishedAnimation));
+	}
+
+	public int LengthWithoutSpace(string str)
+	{
+		int output = 0;
+		for (int i = 0; i < str.Length; i++)
+		{
+			output += str[i] == ' ' || str[i] == '\n' ? 0 : 1;
+		}
+		return output;
 	}
 
 }
