@@ -50,7 +50,11 @@ public class CPU : Node
 			case "reset":
 				return;
 			case "help":
-
+				if (splitted_coms.Length == 1)
+				{
+					terminal.AddScrollingLine(invalid_arg);
+					return;
+				}
 				return;
 		}
 

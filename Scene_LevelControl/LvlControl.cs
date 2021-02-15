@@ -9,11 +9,14 @@ public class LvlControl : Node
 	Node2D header;
 
 	Tween tween;
+	private Tween.TransitionType tt = Tween.TransitionType.Linear;
+	private Tween.EaseType et = Tween.EaseType.InOut;
 	Timer timer1;
 	Timer timer2;
 	AudioStreamPlayer bgm_player;
 
-	private int story_progress = 0;
+	//Set to 0 on default
+	private int story_progress = 15;
 
 	public override void _Ready()
 	{
@@ -30,13 +33,18 @@ public class LvlControl : Node
 		bgm_player = GetNode<AudioStreamPlayer>("BGMPlayer");
 		terminal.Connect(nameof(Terminal.FinishedAnimation), this, nameof(TerminalAnimationEnded));
 
-		SetupInitial();
+		if (DebugState())
+		{
+			SetupInitial();
+		}
+		
 	}
 
 	private void SetupInitial()
 	{
 		terminal.Modulate = new Color(1,1,1,0);
 		terminal.SetStoryInput(true);
+		terminal.SetAllowInput(false);
 		display.Modulate = new Color(1,1,1,0);
 		line_input.Visible = false;
 		display.targets_left.Modulate = new Color(1,1,1,0);
@@ -45,8 +53,6 @@ public class LvlControl : Node
 		bgm_player.VolumeDb = -4;
 		bgm_player.Play();
 
-		Tween.TransitionType tt = Tween.TransitionType.Linear;
-		Tween.EaseType et = Tween.EaseType.InOut;
 		tween.InterpolateProperty(terminal, "modulate:a", 0, 1, 0.2f, tt, et, 0.5f);
 		tween.Start();
 	}
@@ -62,8 +68,6 @@ public class LvlControl : Node
 			case 2:
 				terminal.AddScrollingLine("Congratulations on your new internship position in the OFN!", 1.5);
 				story_progress += 1;
-				Tween.TransitionType tt = Tween.TransitionType.Linear;
-				Tween.EaseType et = Tween.EaseType.InOut;
 				tween.InterpolateProperty(display, "modulate:a", 0, 1, 0.6f, tt, et, 4f);
 				tween.Start();
 				break;
@@ -104,11 +108,35 @@ public class LvlControl : Node
 				story_progress += 1;
 				break;
 			case 12:
-				terminal.AddScrollingLine("the console below.");
+				terminal.AddScrollingLine("the console below, then press enter.");
 				story_progress += 1;
+				line_input.Visible = true;
+				line_input.Modulate = new Color(1,1,1,0);
+				tween.InterpolateProperty(line_input, "modulate:a", 0, 1, 0.6f, tt, et, 0.2f);
+				tween.Start();
 				break;
 			case 13:
 				terminal.AddScrollingLine("Great, welcome onboard!", 3.0);
+				story_progress += 1;
+				break;
+			case 14:
+				terminal.AddScrollingLine("Now, let's get you familiar with the system.", 0.9);
+				story_progress += 1;
+				break;
+			case 15:
+				terminal.AddScrollingLine("Let's start by showing you the tools you can access, type", 0.9);
+				story_progress += 1;
+				break;
+			case 16:
+				terminal.AddScrollingLine("\"list\" into the console.");
+				story_progress += 1;
+				break;
+			case 17:
+				terminal.AddScrollingLine("So these are the units you currently have in the system's", 0.9);
+				story_progress += 1;
+				break;
+			case 18:
+				terminal.AddScrollingLine("arsenal.");
 				story_progress += 1;
 				break;
 		}
@@ -152,7 +180,18 @@ public class LvlControl : Node
 				ProgressStory();
 				break;
 			case 13:
-				line_input.Visible = true;
+				terminal.SetAllowInput(true);
+				break;
+			case 14:
+			case 15:
+			case 16:
+				ProgressStory();
+				break;
+			case 17:
+				terminal.SetAllowInput(true);
+				break;
+			case 18:
+				ProgressStory();
 				break;
 		}
 	}
@@ -165,15 +204,36 @@ public class LvlControl : Node
 				ProgressStory();
 				terminal.SetAllowInput(false);
 				break;
+			case 17:
+				if (new_line.ToLower().Equals("list"))
+				{
+					terminal.AddStaticLine("You current have:");
+					terminal.AddStaticLine("1 Unit(s) of : HBS");
+					terminal.AddStaticLine("1 Unit(s) of : SP");
+
+					ProgressStory();
+					terminal.SetAllowInput(false);
+				}
+				break;
 		}
 	}
 
-	private void DebugState()
+	private bool DebugState()
 	{
 		if (story_progress == 0)
 		{
-			return;
+			return true;
 		}
+		if (story_progress >= 13)
+		{
+			terminal.Modulate = new Color(1,1,1,1);
+			display.Modulate = new Color(1,1,1,1);
+			display.targets_left.Modulate = new Color(1,1,1,0);
+			terminal.SetAllowInput(false);
+			terminal.SetStoryInput(true);
+		}
+		ProgressStory();
+		return false;
 	}
 }
 
