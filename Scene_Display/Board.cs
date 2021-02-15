@@ -18,6 +18,11 @@ public class Board : Control
 
 	public void SetupGridMap(int dimension)
 	{
+		foreach (Node child in GetChildren())
+		{
+			child.QueueFree();
+		}
+
 		int working_wh = (width_height / dimension) * dimension;
 		double size_per_sqr = working_wh/ ((double) dimension);
 		tile_refs = new Tile[dimension][];
@@ -70,6 +75,29 @@ public class Board : Control
 			}
 		}
 		
+	}
+
+	public void SetTargetLoc(int target_num, Tuple<int, int> coord)
+	{
+		target_counts[coord.Item1][coord.Item2] = target_num;
+	}
+
+	private void UpdateBoard()
+	{
+		for (int i = 0; i < tile_refs.Length; i++)
+		{
+			for (int j = 0; j < tile_refs.Length; j++)
+			{
+				if (revealed[i][j])
+				{
+					tile_refs[i][j].content_text.Text = target_counts[i][j].ToString();
+				}
+				else
+				{
+					tile_refs[i][j].content_text.Text = "?";
+				}
+			}
+		}
 	}
 
 }

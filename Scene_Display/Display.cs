@@ -17,4 +17,6 @@ public class Display : Panel
 		header_subtitle = GetNode<Label>("Header/Subtitle");
 		targets_left = GetNode<Label>("TargetsLeft");
 	}
+
+	
 }
