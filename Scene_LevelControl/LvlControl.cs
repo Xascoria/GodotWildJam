@@ -17,7 +17,7 @@ public class LvlControl : Node
 	AudioStreamPlayer bgm_player;
 
 	//Set to 0 on default
-	private int story_progress = 21;
+	private int story_progress = 0;
 
 	public override void _Ready()
 	{
@@ -76,7 +76,7 @@ public class LvlControl : Node
 				terminal.AddScrollingLine("I believe you have already read the memo, so let's get", 1.5);
 				break;
 			case 4:
-				terminal.AddScrollingLine("right down into business!");
+				terminal.AddScrollingLine("right down into business.");
 				break;
 			case 5:
 				terminal.AddScrollingLine("While the system is still connecting with the servers,", 1.5);
@@ -187,7 +187,7 @@ public class LvlControl : Node
 	private void _on_BGMPlayer_finished()
 	{
 		bgm_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/neon_bg.wav");
-		bgm_player.VolumeDb = -12;
+		bgm_player.VolumeDb = -16;
 		bgm_player.Play();
 
 		story_progress = 1;
@@ -251,7 +251,7 @@ public class LvlControl : Node
 				ProgressStory();
 				break;
 			case 33:
-				terminal.SetStoryInput(true);
+				terminal.SetStoryInput(false);
 				terminal.SetAllowInput(true);
 				break;
 		}
@@ -344,6 +344,8 @@ public class LvlControl : Node
 				terminal.cpu.is_tutorial = true;
 				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
 				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 1;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 1;
 
 				board.SetupGridMap(3);
 				display.targets_left.Text = "Target(s) Left: 1";

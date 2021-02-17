@@ -16,6 +16,8 @@ public class Board : Control
 		//SetupGridMap(11);
 	}
 
+	public int GetBoardSize() { return tile_refs.Length; }
+
 	public void SetupGridMap(int dimension)
 	{
 		foreach (Node child in GetChildren())
@@ -38,6 +40,14 @@ public class Board : Control
 			{
 				Tile new_tile = (Tile) tile_ref.Instance();
 				AddChild(new_tile);
+
+				//TODO: more font_size
+				switch(dimension)
+				{
+					case 3:
+						new_tile.SetFontSize(20);
+						break;
+				}
 
 				new_tile.coord_text.Text = i + "," + j;
 				new_tile.content_text.Text = "?";
@@ -98,6 +108,51 @@ public class Board : Control
 				}
 			}
 		}
+	}
+
+	public int GetTargetsLeft()
+	{
+		int output = 0;
+		for (int i = 0; i < target_counts.Length; i++)
+		{
+			for (int j = 0; j < target_counts.Length; j++)
+			{
+				output += target_counts[i][j];
+			}
+		}
+		return output;
+	}
+
+	//Return bool: if the loc is revealed b4, int: target killed
+	public Tuple<bool, int> KillOne(Tuple<int,int> coord)
+	{
+		int target_kill = 0;
+		if (target_counts[coord.Item1][coord.Item2] > 0)
+		{
+			target_counts[coord.Item1][coord.Item2] -= 1;
+			target_kill = 1;
+		}
+		UpdateBoard();
+		return new Tuple<bool, int>(revealed[coord.Item1][coord.Item2],target_kill);
+	}
+
+	public Tuple<bool, int> KillAll(Tuple<int,int> coord)
+	{
+		int target_kill = 0;
+		if (target_counts[coord.Item1][coord.Item2] > 0)
+		{
+			target_kill = target_counts[coord.Item1][coord.Item2];
+			target_counts[coord.Item1][coord.Item2] = 0;
+		}
+		UpdateBoard();
+		return new Tuple<bool, int>(revealed[coord.Item1][coord.Item2],target_kill);
+	}
+
+	public int RevealTarget(Tuple<int,int> coord)
+	{
+		revealed[coord.Item1][coord.Item2] = true;
+		UpdateBoard();
+		return target_counts[coord.Item1][coord.Item2];
 	}
 
 }

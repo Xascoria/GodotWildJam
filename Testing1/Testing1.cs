@@ -26,4 +26,12 @@ public class Testing1 : Node2D
 	https://www.youtube.com/watch?v=PLFVGwGQcB0
 	https://www.youtube.com/watch?v=921z4LAHvak&t=49s
 	*/
+
+	private void _on_Button_pressed()
+	{
+		GetTree().ChangeScene("res://Scene_Main/Main.tscn");
+	}
+
 }
+
+
