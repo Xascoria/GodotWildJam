@@ -17,13 +17,15 @@ public class LvlControl : Node
 	AudioStreamPlayer bgm_player;
 
 	//Set to 0 on default
-	private int story_progress = 0;
+	private int story_progress = 44;
 
 	public override void _Ready()
 	{
 		terminal = GetNode<Terminal>("../Terminal");
 		terminal.Connect(nameof(Terminal.StoryInput), this, nameof(StoryInput));
 		line_input = terminal.input;
+		terminal.cpu.Connect(nameof(CPU.Victory), this, nameof(OnVictory));
+		terminal.cpu.Connect(nameof(CPU.Failure), this, nameof(OnFailure));
 
 		display = GetNode<Display>("../Display");
 		header = display.header;
@@ -165,10 +167,68 @@ public class LvlControl : Node
 				terminal.AddScrollingLine("field to finish the tutorial.");
 				break;
 			case 31:
-				terminal.AddScrollingLine("Remember, you could always use the command \"reset\" if you");
+				terminal.AddScrollingLine("Remember, you could always use the command \"reset\" if you", 1.5);
 				break;
 			case 32:
 				terminal.AddScrollingLine("done something wrong, this is just a simulation after all!");
+				break;
+			//Finish tutorial
+			case 33:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+				terminal.AddScrollingLine("Well done. You are ready.", 4);
+				break;
+			case 34:
+				board.Visible = false;
+				display.targets_left.Visible = false;
+				terminal.AddScrollingLine("It's time for your first field assignment.", 0.9);
+				break;
+			case 35:
+				terminal.AddScrollingLine("There's been a coup in Guyana, and the Pro-OFN government", 0.9);
+				break;
+			case 36:
+				terminal.AddScrollingLine("has been overthrown by a general.");
+				break;
+			case 37:
+				terminal.AddScrollingLine("The marines had landed 2 hours ago, and they are pushing", 0.9);
+				break;
+			case 38:
+				terminal.AddScrollingLine("the Guyanese forces into the mountains.");
+				break;
+			case 39:
+				terminal.AddScrollingLine("A few key coup leaders has escaped into a small forest",0.9);
+				break;
+			case 40:
+				terminal.AddScrollingLine("outside the capital.");
+				break;
+			case 41:
+				terminal.AddScrollingLine("That's going to be your task, you are going to be connected", 0.9);
+				break;
+			case 42:
+				terminal.AddScrollingLine("to the Paramaribo network in a second.");
+				break;
+			case 43:
+				terminal.AddScrollingLine("Consider this as your trial mission, we'll be watching your", 2.0);
+				break;
+			case 44:
+				terminal.AddScrollingLine("performance and decide what happens next.");
+				break;
+			case 45:
+				terminal.AddStaticLine("Connecting to Paramaribo Network...");
+				timer1.WaitTime = 4f;
+				timer1.Start();
+				break;
+			case 56:
+				display.header_subtitle.Text = "Paramaribo Operations";
+				terminal.ClearTerminal();
+				terminal.SetAllowInput(true);
+				terminal.SetStoryInput(false);
+
+				SetupLevel(1);
+
+				board.Visible = true;
+				display.targets_left.Visible = true;
+				terminal.AddStaticLine("New equipment unlocked: Small bomb (SB)");
 				break;
 		}
 		story_progress += 1;
@@ -181,7 +241,17 @@ public class LvlControl : Node
 
 	private void _on_Timer_timeout()
 	{
-		// Replace with function body.
+		if (story_progress >= 46 && story_progress <= 55)
+		{
+			terminal.AddStaticLine((story_progress - 45).ToString() + "0%");
+			timer1.WaitTime = 0.2f;
+			timer1.Start();
+			story_progress += 1;
+		}
+		else if (story_progress == 56)
+		{
+			ProgressStory();
+		}
 	}
 
 	private void _on_BGMPlayer_finished()
@@ -253,6 +323,20 @@ public class LvlControl : Node
 			case 33:
 				terminal.SetStoryInput(false);
 				terminal.SetAllowInput(true);
+				break;
+			case 34:
+			case 35:
+			case 36:
+			case 37:
+			case 38:
+			case 39:
+			case 40:
+			case 41:
+			case 42:
+			case 43:
+			case 44:
+			case 45:
+				ProgressStory();
 				break;
 		}
 	}
@@ -351,6 +435,51 @@ public class LvlControl : Node
 				display.targets_left.Text = "Target(s) Left: 1";
 				board.SetTargetLoc(1, new Tuple<int, int>(1,1));
 				break;
+			case 1:
+				terminal.cpu.is_tutorial = false;
+				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 1;
+
+				board.SetupGridMap(4);
+				display.targets_left.Text = "Target(s) Left: 3";
+				int[] rand_array = new int[16];
+				for (int i = 0; i < 16; i++)
+				{
+					rand_array[i] = i;
+				}
+				ShuffleArray<int>(rand_array);
+				for (int i = 0;  i < 3; i++)
+				{
+					board.SetTargetLoc(1, new Tuple<int, int>(rand_array[i]/4,rand_array[i]%4));
+				}
+				break;
+		}
+	}
+
+	public void OnVictory()
+	{
+		switch(story_progress)
+		{
+			case 33:
+				ProgressStory();
+				break;
+			case 57:
+				//todo
+				break;
+		}
+	}
+
+	public void OnFailure()
+	{
+		switch(story_progress)
+		{
+			case 57:
+				//todo
+				break;
 		}
 	}
 
@@ -369,8 +498,25 @@ public class LvlControl : Node
 			terminal.SetAllowInput(false);
 			terminal.SetStoryInput(true);
 		}
+		if (story_progress >= 24)
+		{
+			board.Modulate = new Color(1,1,1,1);
+			display.targets_left.Modulate = new Color(1,1,1,1);
+		}
 		ProgressStory();
 		return false;
+	}
+
+	private void ShuffleArray<T>(T[] input)
+	{
+		int n = input.Length;
+		while (n > 1) 
+		{
+			int k = new Random().Next(n--);
+			T temp = input[n];
+			input[n] = input[k];
+			input[k] = temp;
+		}
 	}
 }
 

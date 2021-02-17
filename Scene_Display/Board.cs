@@ -12,7 +12,7 @@ public class Board : Control
 	{
 		width_height = (int) RectSize.x;
 
-		//TODO: Testing
+		// Testing
 		//SetupGridMap(11);
 	}
 
@@ -45,7 +45,10 @@ public class Board : Control
 				switch(dimension)
 				{
 					case 3:
-						new_tile.SetFontSize(20);
+						new_tile.SetFontSize(40);
+						break;
+					case 4:
+						new_tile.SetFontSize(32);
 						break;
 				}
 
@@ -136,6 +139,7 @@ public class Board : Control
 		return new Tuple<bool, int>(revealed[coord.Item1][coord.Item2],target_kill);
 	}
 
+	//Return bool: if the loc is revealed b4, int: target killed
 	public Tuple<bool, int> KillAll(Tuple<int,int> coord)
 	{
 		int target_kill = 0;

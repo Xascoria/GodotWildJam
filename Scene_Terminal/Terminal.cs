@@ -146,6 +146,13 @@ public class Terminal : Panel
 		return output;
 	}
 
+	public void ClearTerminal()
+	{
+		output.Text = "";
+		output.VisibleCharacters = 0;
+		line_taken = 0;
+	}
+
 }
 
 

@@ -25,7 +25,7 @@ public class CPU : Node
 	{
 		{UnitType.HBS, false},
 		{UnitType.SP, false},
-		{UnitType.SB, false},
+		{UnitType.SB, true},
 		{UnitType.BB, false},
 	};
 	public bool is_tutorial = false;
@@ -100,11 +100,24 @@ public class CPU : Node
 				{
 					if (splitted_coms[1].Equals("hbs"))
 					{
-
+						terminal.AddStaticLine("HBS: Heartbeat Scanner");
+						terminal.AddStaticLine("Scan for human heartbeats, reveals their locations.");
+						terminal.AddStaticLine("Range: 3x3 tiles from the center tile.");
 					}
-					if (splitted_coms[1].Equals("sp"))
+					else if (splitted_coms[1].Equals("sp"))
 					{
-						
+						terminal.AddStaticLine("SP: Sniper");
+						terminal.AddStaticLine("Kill one target on the given coord.");
+						terminal.AddStaticLine("Range: 1x1 tile.");
+					}
+					else if (splitted_coms[1].Equals("sb"))
+					{
+						terminal.AddStaticLine("SB: Small Bomb");
+						terminal.AddStaticLine("Kills all target in its range.");
+						terminal.AddStaticLine("Range: a cross from the center.");
+						terminal.AddStaticLine("|_|x|_|");
+						terminal.AddStaticLine("|x|X|x|");
+						terminal.AddStaticLine("|_|x|_|");
 					}
 				}
 				return;
@@ -138,6 +151,9 @@ public class CPU : Node
 				return;
 			case "sp":
 				ExecuteUnit(UnitType.SP, lower_in);
+				return;
+			case "sb":
+				ExecuteUnit(UnitType.SB, lower_in);
 				return;
 		}
 
@@ -191,26 +207,45 @@ public class CPU : Node
 				break;
 			case UnitType.SP:
 				Tuple<bool, int> info = display.board.KillOne(new Tuple<int, int>(coord_info.Item2, coord_info.Item3));
-				if (info.Item1)
+				if (info.Item1 && info.Item2 != 0)
 				{
 					terminal.AddStaticLine("Sniper killed a target on " + coord_info.Item2.ToString() + "," + coord_info.Item3.ToString());
-					display.targets_left.Text = "Target(s) Left: " + display.board.GetTargetsLeft();
 				}
+				break;
+			case UnitType.SB:
+				int[][] int_trans = new int[][]{new int[]{0,0}, new int[]{0,1}, new int[]{0,-1}, new int[]{1,0}, new int[]{-1,0}};
+				for (int i = 0; i < int_trans.Length; i++)
+				{
+					int x = coord_info.Item2 + int_trans[i][0];
+					int y = coord_info.Item3 + int_trans[i][1];
+					if (CoordInRange(x,y))
+					{
+						Tuple<bool, int> info_sb = display.board.KillAll(new Tuple<int,int>(x,y));
+						if (info_sb.Item2 != 0)
+						{
+							if (info_sb.Item1)
+							{
+								terminal.AddStaticLine("A small bomb has killed " + info_sb.Item2 + " target(s) at " + x + "," + y);
+							}
+							else
+							{
+								terminal.AddStaticLine("A small bomb has killed " + info_sb.Item2 + " at an unknown location.");
+							}
+						}
+					}
+				}
+				
 				break;
 		}
 		unit_amounts[unit_type] -= 1;
-		//TODO: verify victory & failed conditions
+		display.targets_left.Text = "Target(s) Left: " + display.board.GetTargetsLeft();
 		if (display.board.GetTargetsLeft() == 0)
 		{
-			//victory conditions
+			EmitSignal(nameof(Victory));
 		}
-		if (UnitsLeft() == 0)
+		else if (UnitsLeft() == 0)
 		{
-			//fail condition
-		}
-		else
-		{
-
+			EmitSignal(nameof(Failure));
 		}
 	}
 
