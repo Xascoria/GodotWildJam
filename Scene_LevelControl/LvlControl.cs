@@ -16,8 +16,10 @@ public class LvlControl : Node
 	Timer timer2;
 	AudioStreamPlayer bgm_player;
 
+	private int story_var_1 = 1;
+	private int story_var_2 = -1;
 	//Set to 0 on default
-	private int story_progress = 44;
+	private int story_progress = 57;
 
 	public override void _Ready()
 	{
@@ -230,6 +232,93 @@ public class LvlControl : Node
 				display.targets_left.Visible = true;
 				terminal.AddStaticLine("New equipment unlocked: Small bomb (SB)");
 				break;
+			case 57:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+				//Level 1
+				//Victory
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("All targets eliminated, well done.", 3.0);
+				}
+				//Failure 
+				else
+				{
+					terminal.AddScrollingLine("It seems that some coup leaders had escaped.", 3.0);
+				}
+				break;
+			case 58:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("I knew I saw great potential in you.", 0.9);
+				}
+				//Failure 
+				else
+				{
+					terminal.AddScrollingLine("I'm disappointed in you, kid, I thought I saw great", 0.9);
+				}
+				break;
+			case 59:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("Congrats, you are now officially a field operator of the", 1.5);
+				}
+				else
+				{
+					terminal.AddScrollingLine("potential in you.");
+				}
+				break;
+			case 60:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("OFN!");
+				}
+				else
+				{
+					terminal.AddScrollingLine("On the orders of Director Hoover, you are hereby relieved", 0.9);
+				}
+				break;
+			case 61:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("From now on, the automated system will take over my post", 0.9);
+				}
+				else
+				{
+					terminal.AddScrollingLine("of your duties.");
+				}
+				break;
+			case 62:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("and give you new assignments.");
+				}
+				else
+				{
+					terminal.AddScrollingLine("Your security clearance will be revoked in a few seconds.", 2.0);
+				}
+				break;
+			case 63:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("For the free nations of the world!", 2.0);
+				}
+				else
+				{
+					terminal.AddScrollingLine("Your security clearance will be revoked in a few seconds.", 2.0);
+				}
+				break;
+			case 64:
+				if (story_var_1 == 1)
+				{
+
+				}
+				else
+				{
+				
+				}
+				break;
+
 		}
 		story_progress += 1;
 	}
@@ -263,9 +352,6 @@ public class LvlControl : Node
 		story_progress = 1;
 		ProgressStory();
 	}
-
-	private int story_var_1 = -1;
-	private int story_var_2 = -1;
 
 	public void TerminalAnimationEnded()
 	{
@@ -336,6 +422,13 @@ public class LvlControl : Node
 			case 43:
 			case 44:
 			case 45:
+			case 58:
+			case 59:
+			case 60:
+			case 61:
+			case 62:
+			case 63:
+			case 64:
 				ProgressStory();
 				break;
 		}
@@ -468,7 +561,8 @@ public class LvlControl : Node
 				ProgressStory();
 				break;
 			case 57:
-				//todo
+				story_var_1 = 1;
+				ProgressStory();
 				break;
 		}
 	}
@@ -478,7 +572,8 @@ public class LvlControl : Node
 		switch(story_progress)
 		{
 			case 57:
-				//todo
+				story_var_1 = 2;
+				ProgressStory();
 				break;
 		}
 	}

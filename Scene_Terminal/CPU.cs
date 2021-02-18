@@ -157,7 +157,7 @@ public class CPU : Node
 				return;
 		}
 
-		terminal.AddScrollingLine(invalid_com);
+		terminal.AddStaticLine(invalid_com);
 	}
 
 	private void ExecuteUnit(UnitType unit_type, string line_input)
