@@ -50,6 +50,9 @@ public class Board : Control
 					case 4:
 						new_tile.SetFontSize(32);
 						break;
+					case 6:
+						new_tile.SetFontSize(24);
+						break;
 				}
 
 				new_tile.coord_text.Text = i + "," + j;

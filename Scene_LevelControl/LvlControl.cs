@@ -15,11 +15,12 @@ public class LvlControl : Node
 	Timer timer1;
 	Timer timer2;
 	AudioStreamPlayer bgm_player;
+	Ending ending_scene;
 
 	private int story_var_1 = 1;
 	private int story_var_2 = -1;
 	//Set to 0 on default
-	private int story_progress = 57;
+	private int story_progress = 68;
 
 	public override void _Ready()
 	{
@@ -32,6 +33,8 @@ public class LvlControl : Node
 		display = GetNode<Display>("../Display");
 		header = display.header;
 		board = display.board;
+
+		ending_scene = GetNode<Ending>("../Ending");
 		
 		tween = GetNode<Tween>("Tween");
 		timer1 = GetNode<Timer>("Timer");
@@ -305,27 +308,65 @@ public class LvlControl : Node
 				}
 				else
 				{
-					terminal.AddScrollingLine("Your security clearance will be revoked in a few seconds.", 2.0);
+					bgm_player.Stop();
+					bgm_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/startup.wav");
+					bgm_player.Play();
+					tween.InterpolateProperty(terminal, "modulate:a", 1, 0, 0.5f, tt, et, 0);
+					tween.InterpolateProperty(board, "modulate:a", 1, 0, 0.5f, tt, et, 0.75f);
+					tween.InterpolateProperty(display.targets_left, "modulate:a", 1, 0, 0.5f, tt, et, 0.75f);
+					tween.InterpolateProperty(display.header, "modulate:a", 1, 0, 0.5f, tt, et, 1.5f);
+					tween.InterpolateProperty(display, "modulate:a", 1, 0, 0.5f, tt, et, 2.25f);
+					tween.Start();
+					ending_scene.StartEnding(1, 4.5);
 				}
 				break;
 			case 64:
-				if (story_var_1 == 1)
-				{
-
-				}
-				else
-				{
-				
-				}
+				terminal.AddScrollingLine("Speaking of which, seems like the system has a message for", 1.5);
 				break;
+			case 65:
+				terminal.AddScrollingLine("you.");
+				break;
+			case 66:
+				terminal.AddScrollingLine("I'll let it do the talking from now, make us proud, kid.", 1.5);
+				break;
+			case 67:
+				terminal.AddScrollingLine("THIS IS AN AUTOMATED MESSAGE", 5.0);
+				break;
+			case 68:
+				terminal.AddScrollingLine("SOUTH AMERICA HEADQUATERS REPORTED A CIVIL WAR HAS BROKEN", 2.0);
+				break;
+			case 69:
+				terminal.AddScrollingLine("OUT IN ARGENTINA");
+				break;
+			case 70:
+				terminal.AddScrollingLine("FIELD OPERATORS: BE PREPARED TO RECEIVE ORDERS", 2.0);
+				break;
+			case 71:
+				terminal.AddScrollingLine("ORDER 44: REMOVE POCKETS OF RESISTANCE NEAR BUENOS AIRES", 2.0);
+				break;
+			case 72:
+				terminal.AddScrollingLine("YOU WILL BE CONNECTED TO B.A. OPERATIONS SYSTEM", 2.0);
+				break;
+			case 73:
+				timer1.WaitTime = 4f;
+				timer1.Start();
+				break;
+			case 84:
+				terminal.ClearTerminal();
 
+				SetupLevel(2);
+
+				terminal.AddStaticLine("HOSTILE TARGETS DETECTED IN THIS REGION");
+				terminal.SetAllowInput(true);
+				terminal.SetStoryInput(false);
+				break;
 		}
 		story_progress += 1;
 	}
 
 	private void _on_Tween_tween_all_completed()
 	{
-		// Replace with function body.
+		//func
 	}
 
 	private void _on_Timer_timeout()
@@ -341,16 +382,31 @@ public class LvlControl : Node
 		{
 			ProgressStory();
 		}
+		else if (story_progress >= 74 && story_progress <= 83)
+		{
+			terminal.AddStaticLine((story_progress - 73).ToString() + "0%");
+			timer1.WaitTime = 0.2f;
+			timer1.Start();
+			story_progress += 1;
+		}
+		else if (story_progress == 84)
+		{
+			ProgressStory();
+		}
+
 	}
 
 	private void _on_BGMPlayer_finished()
 	{
-		bgm_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/neon_bg.wav");
-		bgm_player.VolumeDb = -16;
-		bgm_player.Play();
+		if (story_progress == 0)
+		{
+			bgm_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/neon_bg.wav");
+			bgm_player.VolumeDb = -16;
+			bgm_player.Play();
 
-		story_progress = 1;
-		ProgressStory();
+			story_progress = 1;
+			ProgressStory();
+		}
 	}
 
 	public void TerminalAnimationEnded()
@@ -428,7 +484,23 @@ public class LvlControl : Node
 			case 61:
 			case 62:
 			case 63:
+				ProgressStory();
+				break;
 			case 64:
+				if (story_var_1 == 1)
+				{
+					ProgressStory();
+				}
+				break;
+			case 65:
+			case 66:
+			case 67:
+			case 68:
+			case 69:
+			case 70:
+			case 71:
+			case 72:
+			case 73:
 				ProgressStory();
 				break;
 		}
@@ -550,6 +622,20 @@ public class LvlControl : Node
 					board.SetTargetLoc(1, new Tuple<int, int>(rand_array[i]/4,rand_array[i]%4));
 				}
 				break;
+			case 2:
+			//todo
+				terminal.cpu.is_tutorial = false;
+				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 1;
+
+				board.SetupGridMap(6);
+				display.targets_left.Text = "Target(s) Left: ";
+				rand_array = new int[36];
+				break;
 		}
 	}
 
@@ -614,11 +700,4 @@ public class LvlControl : Node
 		}
 	}
 }
-
-
-
-
-
-
-
 
