@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Ending : Node2D
 {
@@ -12,6 +13,12 @@ public class Ending : Node2D
 	private Tween tween;
 	private AudioStreamPlayer music_player;
 	private Timer timer;
+
+	private int ending_num = -1;
+	private Dictionary<int, string> restart_txt = new Dictionary<int, string>()
+	{
+		{1, "Perhaps it's for the best?"},
+	};
 
 	public override void _Ready()
 	{
@@ -43,8 +50,10 @@ public class Ending : Node2D
 		music_player.VolumeDb = -80;
 	}
 
+
 	public void StartEnding(int ending_num, double time_before_fade = 0)
 	{
+		this.ending_num = ending_num;
 		switch(ending_num)
 		{
 			case 1:
@@ -52,6 +61,7 @@ public class Ending : Node2D
 			title.Text = "Nothing Much Happened";
 			quote.Text = "Fortunes can turn into misfortunes, and misfortunes can turn into fortunes.\nThe changes are elusive and unpredictable.";
 			quoter.Text = "- Chinese Fable";
+			restart_but.Text = restart_txt[ending_num];
 			music_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/ending_1.wav");
 			music_player.Play();
 
@@ -107,7 +117,21 @@ public class Ending : Node2D
 		GetTree().ReloadCurrentScene();
 	}
 
+	private void _on_Button_mouse_entered()
+	{
+		restart_but.Text = "RESTART";
+	}
+
+
+	private void _on_Button_mouse_exited()
+	{
+		restart_but.Text = restart_txt[ending_num];
+	}
+
 }
+
+
+
 
 
 

@@ -229,7 +229,7 @@ public class CPU : Node
 							}
 							else
 							{
-								terminal.AddStaticLine("A small bomb has killed " + info_sb.Item2 + " at an unknown location.");
+								terminal.AddStaticLine("A small bomb has killed " + info_sb.Item2 + " target(s) at an unknown location.");
 							}
 						}
 					}

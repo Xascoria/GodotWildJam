@@ -15,9 +15,9 @@ public class Testing1 : Node2D
 	}
 
 	/*
-	Guiana coup d'etat
-	Argentinian civil war
-	Indonesian uprising
+	Guiana coup d'etat (done)
+	Argentinian civil war (done)
+	Indonesian uprising 
 	South African War - Boer Uprising
 	American Civil War
 

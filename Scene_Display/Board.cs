@@ -50,8 +50,8 @@ public class Board : Control
 					case 4:
 						new_tile.SetFontSize(32);
 						break;
-					case 6:
-						new_tile.SetFontSize(24);
+					case 7:
+						new_tile.SetFontSize(20);
 						break;
 				}
 

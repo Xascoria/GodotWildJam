@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scene_Ending/Ending.cs" type="Script" id=1]
 
@@ -16,12 +16,35 @@ font_data = SubResource( 2 )
 size = 30
 font_data = SubResource( 2 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.219608, 0.219608, 0.219608, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.0980392, 0.0980392, 0.0980392, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.0980392, 0.0980392, 0.0980392, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="DynamicFont" id=9]
 size = 30
 extra_spacing_top = -5
 font_data = SubResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=10]
 size = 30
 font_data = SubResource( 2 )
 
@@ -85,7 +108,12 @@ margin_left = 384.0
 margin_top = 512.0
 margin_right = 896.0
 margin_bottom = 592.0
-custom_fonts/font = SubResource( 5 )
+focus_mode = 0
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 text = "Perhaps it's for the best?"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -96,7 +124,7 @@ margin_left = 920.0
 margin_top = 648.0
 margin_right = 1272.0
 margin_bottom = 712.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Ending 1 of 4"
 align = 2
@@ -112,6 +140,8 @@ __meta__ = {
 one_shot = true
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+[connection signal="mouse_entered" from="Button" to="." method="_on_Button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_Button_mouse_exited"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 [connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

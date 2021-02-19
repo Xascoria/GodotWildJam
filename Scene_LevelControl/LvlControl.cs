@@ -17,10 +17,11 @@ public class LvlControl : Node
 	AudioStreamPlayer bgm_player;
 	Ending ending_scene;
 
-	private int story_var_1 = 1;
+	private int story_var_1 = -1;
 	private int story_var_2 = -1;
+	private bool ending_4_possible = true;
 	//Set to 0 on default
-	private int story_progress = 68;
+	private int story_progress = 87;
 
 	public override void _Ready()
 	{
@@ -262,6 +263,8 @@ public class LvlControl : Node
 				}
 				break;
 			case 59:
+				board.Visible = false;
+				display.targets_left.Visible = false;
 				if (story_var_1 == 1)
 				{
 					terminal.AddScrollingLine("Congrats, you are now officially a field operator of the", 1.5);
@@ -339,26 +342,90 @@ public class LvlControl : Node
 				terminal.AddScrollingLine("OUT IN ARGENTINA");
 				break;
 			case 70:
-				terminal.AddScrollingLine("FIELD OPERATORS: BE PREPARED TO RECEIVE ORDERS", 2.0);
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT ORDERS", 2.0);
 				break;
 			case 71:
 				terminal.AddScrollingLine("ORDER 44: REMOVE POCKETS OF RESISTANCE NEAR BUENOS AIRES", 2.0);
 				break;
 			case 72:
-				terminal.AddScrollingLine("YOU WILL BE CONNECTED TO B.A. OPERATIONS SYSTEM", 2.0);
+				terminal.AddScrollingLine("YOU WILL BE CONNECTED TO THE B.A. OPERATIONS SYSTEM", 2.0);
 				break;
 			case 73:
 				timer1.WaitTime = 4f;
 				timer1.Start();
 				break;
 			case 84:
+				display.header_subtitle.Text = "Buenos Aires Operations";
 				terminal.ClearTerminal();
 
 				SetupLevel(2);
 
 				terminal.AddStaticLine("HOSTILE TARGETS DETECTED IN THIS REGION");
+				terminal.AddStaticLine("ASSIGNMENT: ELIMINATES ALL TARGETS");
 				terminal.SetAllowInput(true);
 				terminal.SetStoryInput(false);
+
+				board.Visible = true;
+				display.targets_left.Visible = true;
+				break;
+			case 85:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("ALL TARGETS ELIMINATED", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("WARNING: ARSENAL DEPLETED", 2);
+				}
+				break;
+			case 86:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED SUCCESS", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED FAILURE", 2);
+				}
+				break;
+			case 87:
+				terminal.AddScrollingLine("FIELD REPORTS SENT TO HQ FOR EVALUATION", 2);
+				break;
+			case 88:
+				board.Visible = false;
+				display.targets_left.Visible = false;
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT NEW ORDERS");
+				break;
+			case 89:
+				terminal.AddScrollingLine("THIS IS AN AUTOMATED MESSAGE", 8);
+				break;
+			case 90:
+				terminal.AddScrollingLine("AFRICA HEADQUATERS REPORTED THAT THE BOERS MINORITY HAS", 2);
+				break;
+			case 91:
+				terminal.AddScrollingLine("RISEN UP AGAINIST THE SOUTH ARFICAN GOVERNMENT.");
+				break;
+			case 92:
+				terminal.AddScrollingLine("IN ADDITION, THE GERMAN COLONIES UP NORTH HAS DECIDED TO", 2);
+				break;
+			case 93:
+				terminal.AddScrollingLine("BACKED THE NEW BOER REPUBLIC IN THE UPRISING.");
+				break;
+			case 94:
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT ORDERS", 2);
+				break;
+			case 95:
+				terminal.AddScrollingLine("ORDER 45: REMOVE POCKETS OF BOER REBELS NEAR PRETORIA", 2);
+				break;
+			case 96:
+				terminal.AddScrollingLine("YOU WILL BE CONNECTED TO THE CAPE TOWN OPERATIONS SYSTEM.", 2);
+				break;
+			case 97:
+				timer1.WaitTime = 4f;
+				timer1.Start();
 				break;
 		}
 		story_progress += 1;
@@ -501,6 +568,17 @@ public class LvlControl : Node
 			case 71:
 			case 72:
 			case 73:
+			case 86:
+			case 87:
+			case 88:
+			case 89:
+			case 90:
+			case 91:
+			case 92:
+			case 93:
+			case 94:
+			case 95:
+			case 96:
 				ProgressStory();
 				break;
 		}
@@ -628,13 +706,22 @@ public class LvlControl : Node
 				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
 				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
 				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
-				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 2;
-				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 2;
-				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 1;
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 3;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 4;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 2;
 
-				board.SetupGridMap(6);
-				display.targets_left.Text = "Target(s) Left: ";
-				rand_array = new int[36];
+				board.SetupGridMap(5);
+				display.targets_left.Text = "Target(s) Left: 5";
+				rand_array = new int[25];
+				for (int i = 0; i < 25; i++)
+				{
+					rand_array[i] = i;
+				}
+				ShuffleArray<int>(rand_array);
+				for (int i = 0;  i < 5; i++)
+				{
+					board.SetTargetLoc(1, new Tuple<int, int>(rand_array[i]/5,rand_array[i]%5));
+				}
 				break;
 		}
 	}
@@ -650,6 +737,11 @@ public class LvlControl : Node
 				story_var_1 = 1;
 				ProgressStory();
 				break;
+			case 85:
+				story_var_1 = 1;
+				ending_4_possible = false;
+				ProgressStory();
+				break;
 		}
 	}
 
@@ -659,6 +751,11 @@ public class LvlControl : Node
 		{
 			case 57:
 				story_var_1 = 2;
+				ProgressStory();
+				break;
+			case 85:
+				story_var_1 = 2;
+				ending_4_possible = display.board.GetTargetsLeft() == 5;
 				ProgressStory();
 				break;
 		}
