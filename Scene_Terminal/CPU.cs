@@ -12,21 +12,23 @@ public class CPU : Node
 	public Display display;
 	public enum UnitType 
 	{
-		HBS, SP, SB, BB
+		HBS, SP, SB, LB, AHBS
 	}
 	public Dictionary<UnitType, int> unit_amounts = new Dictionary<UnitType, int>
 	{
 		{UnitType.HBS, 0},
 		{UnitType.SP, 0},
 		{UnitType.SB, 0},
-		{UnitType.BB, 0},
+		{UnitType.LB, 0},
+		{UnitType.AHBS, 0},
 	};
 	public Dictionary<UnitType, bool> unit_unlocked = new Dictionary<UnitType, bool>
 	{
 		{UnitType.HBS, false},
 		{UnitType.SP, false},
-		{UnitType.SB, true},
-		{UnitType.BB, false},
+		{UnitType.SB, false},
+		{UnitType.LB, false},
+		{UnitType.AHBS, false},
 	};
 	public bool is_tutorial = false;
 
@@ -119,6 +121,12 @@ public class CPU : Node
 						terminal.AddStaticLine("|x|X|x|");
 						terminal.AddStaticLine("|_|x|_|");
 					}
+					else if (splitted_coms[1].Equals("ahbs"))
+					{
+						terminal.AddStaticLine("AHBS: Advanced Heartbeat Scanner");
+						terminal.AddStaticLine("Scan for human heartbeats, reveals their locations.");
+						terminal.AddStaticLine("Range: 5x5 tiles from the center tile.");
+					}
 				}
 				return;
 			case "list":
@@ -129,6 +137,7 @@ public class CPU : Node
 					{
 						int amount = unit_amounts[type];
 						string unit_name = "";
+						//todo
 						switch(type)
 						{
 							case UnitType.HBS:
@@ -139,6 +148,9 @@ public class CPU : Node
 								break;
 							case UnitType.SB:
 								unit_name = "SB";
+								break;
+							case UnitType.AHBS:
+								unit_name = "AHBS";
 								break;
 						}
 						terminal.AddStaticLine(amount + " unit(s) of : " + unit_name);
@@ -154,6 +166,9 @@ public class CPU : Node
 				return;
 			case "sb":
 				ExecuteUnit(UnitType.SB, lower_in);
+				return;
+			case "ahbs":
+				ExecuteUnit(UnitType.AHBS, lower_in);
 				return;
 		}
 
@@ -197,7 +212,7 @@ public class CPU : Node
 							int x = coord_info.Item2 + i;
 							int y = coord_info.Item3 + j;
 							int target_num = display.board.RevealTarget(new Tuple<int, int>(x, y));
-							if (target_num != 0)
+							if (target_num != 0 && target_num != -1)
 							{
 								terminal.AddStaticLine(target_num + " target(s) revealed at: " + x.ToString() + "," + y.ToString());
 							}
@@ -235,6 +250,25 @@ public class CPU : Node
 					}
 				}
 				
+				break;
+			case UnitType.AHBS:
+				for (int i = -2; i < 3; i++)
+				{
+					for (int j = -2; j < 3; j++)
+					{
+						if (CoordInRange(coord_info.Item2 + i, coord_info.Item3 + j))
+						{
+							int x = coord_info.Item2 + i;
+							int y = coord_info.Item3 + j;
+							int target_num = display.board.RevealTarget(new Tuple<int, int>(x, y));
+							if (target_num != 0 && target_num != -1)
+							{
+								terminal.AddStaticLine(target_num + " target(s) revealed at: " + x.ToString() + "," + y.ToString());
+							}
+						}
+					}
+				}
+
 				break;
 		}
 		unit_amounts[unit_type] -= 1;

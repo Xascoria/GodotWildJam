@@ -21,7 +21,7 @@ public class LvlControl : Node
 	private int story_var_2 = -1;
 	private bool ending_4_possible = true;
 	//Set to 0 on default
-	private int story_progress = 87;
+	private int story_progress = 113;
 
 	public override void _Ready()
 	{
@@ -427,6 +427,89 @@ public class LvlControl : Node
 				timer1.WaitTime = 4f;
 				timer1.Start();
 				break;
+			case 108:
+				display.header_subtitle.Text = "Cape Town Operations";
+				terminal.ClearTerminal();
+				board.Visible = true;
+				display.targets_left.Visible = true;
+
+				SetupLevel(3);
+
+				terminal.AddStaticLine("OPERATOR: YOU HAVE (1) MESSAGE");
+				terminal.AddStaticLine("YOU HAVE A NEW UNIT IN YOUR ARSENAL: AHBS");
+				terminal.SetAllowInput(true);
+				terminal.SetStoryInput(false);
+				break;
+			case 109:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("ALL TARGETS ELIMINATED", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("WARNING: ARSENAL DEPLETED", 2);
+				}
+				break;
+			case 110:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED SUCCESS", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED FAILURE", 2);
+				}
+				break;
+			case 111:
+				terminal.AddScrollingLine("FIELD REPORTS SENT TO HQ FOR EVALUATION", 2);
+				break;
+			case 112:
+				board.Visible = false;
+				display.targets_left.Visible = false;
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT NEW ORDERS");
+				break;
+			case 113:
+				terminal.AddScrollingLine("THIS IS AN AUTOMATED MESSAGE", 8);
+				break;
+			case 114:
+				terminal.AddScrollingLine("ASIA HEADQUATERS REPORTED THAT A CIVIL WAR HAS BROKEN OUT", 2);
+				break;
+			case 115:
+				terminal.AddScrollingLine("IN INDONESIA.");
+				break;
+			case 116:
+				terminal.AddScrollingLine("THE REBELS, LEADED BY THE FORMER VICE-PRESIDENT, HAS", 2);
+				break;
+			case 117:
+				terminal.AddScrollingLine("ALIGNED HIS FREE INDONESIAN FORCES WITH THE OFN.");
+				break;
+			case 118:
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT ORDERS", 2);
+				break;
+			case 119:
+				terminal.AddScrollingLine("ORDER 46: REMOVE INDONESIAN GUERILLA FORCES OUTSIDE OF", 2);
+				break;
+			case 120:
+				terminal.AddScrollingLine("JAKARTA");
+				break;
+			case 121:
+				terminal.AddScrollingLine("YOU WILL BE CONNECTED TO THE JAKARTA OPERATIONS SYSTEM.", 2);
+				break;
+			case 122:
+				timer1.WaitTime = 4f;
+				timer1.Start();
+				break;
+			case 133:
+				display.header_subtitle.Text = "Jakarta Operations";
+				terminal.ClearTerminal();
+				terminal.SetAllowInput(true);
+				terminal.SetStoryInput(false);
+
+				//TODO
+				terminal.AddStaticLine("That's it for today, folks.");
+				break;
 		}
 		story_progress += 1;
 	}
@@ -457,6 +540,28 @@ public class LvlControl : Node
 			story_progress += 1;
 		}
 		else if (story_progress == 84)
+		{
+			ProgressStory();
+		}
+		else if (story_progress >= 98 && story_progress <= 107)
+		{
+			terminal.AddStaticLine((story_progress - 97).ToString() + "0%");
+			timer1.WaitTime = 0.2f;
+			timer1.Start();
+			story_progress += 1;
+		}
+		else if (story_progress == 108)
+		{
+			ProgressStory();
+		}
+		else if (story_progress >= 123 && story_progress <= 132)
+		{
+			terminal.AddStaticLine((story_progress - 122).ToString() + "0%");
+			timer1.WaitTime = 0.2f;
+			timer1.Start();
+			story_progress += 1;
+		}
+		else if (story_progress == 133)
 		{
 			ProgressStory();
 		}
@@ -579,6 +684,20 @@ public class LvlControl : Node
 			case 94:
 			case 95:
 			case 96:
+			case 97:
+			case 110:
+			case 111:
+			case 112:
+			case 113:
+			case 114:
+			case 115:
+			case 116:
+			case 117:
+			case 118:
+			case 119:
+			case 120:
+			case 121:
+			case 122:
 				ProgressStory();
 				break;
 		}
@@ -701,7 +820,6 @@ public class LvlControl : Node
 				}
 				break;
 			case 2:
-			//todo
 				terminal.cpu.is_tutorial = false;
 				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
 				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
@@ -723,6 +841,42 @@ public class LvlControl : Node
 					board.SetTargetLoc(1, new Tuple<int, int>(rand_array[i]/5,rand_array[i]%5));
 				}
 				break;
+			case 3:
+				terminal.cpu.is_tutorial = false;
+
+				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.AHBS] = true;
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 6;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 4;
+				terminal.cpu.unit_amounts[CPU.UnitType.AHBS] = 1;
+
+				board.SetupGridMap(7);
+				display.targets_left.Text = "Target(s) Left: 8";
+				Random rng = new Random();
+				int[][] simulate = new int[7][];
+				for (int i = 0;  i < 7; i++)
+				{
+					simulate[i] = new int[7];
+				}
+				for (int i = 0; i < 8; i++)
+				{
+					simulate[rng.Next(7)][rng.Next(7)] += 1;
+				}
+				for (int i = 0; i < 7; i++)
+				{
+					for (int j = 0; j < 7; j ++)
+					{
+						board.SetTargetLoc(simulate[i][j], new Tuple<int, int>(i, j));
+					}
+				}
+				break;
+			case 4:
+			//todo
+				terminal.cpu.is_tutorial = false;
+				break;
 		}
 	}
 
@@ -742,6 +896,11 @@ public class LvlControl : Node
 				ending_4_possible = false;
 				ProgressStory();
 				break;
+			case 109:
+				story_var_1 = 1;
+				ending_4_possible = false;
+				ProgressStory();
+				break;
 		}
 	}
 
@@ -756,6 +915,11 @@ public class LvlControl : Node
 			case 85:
 				story_var_1 = 2;
 				ending_4_possible = display.board.GetTargetsLeft() == 5;
+				ProgressStory();
+				break;
+			case 109:
+				story_var_1 = 2;
+				ending_4_possible = display.board.GetTargetsLeft() == 8;
 				ProgressStory();
 				break;
 		}

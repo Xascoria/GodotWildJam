@@ -50,6 +50,9 @@ public class Board : Control
 					case 4:
 						new_tile.SetFontSize(32);
 						break;
+					case 5:
+						new_tile.SetFontSize(24);
+						break;
 					case 7:
 						new_tile.SetFontSize(20);
 						break;
@@ -157,6 +160,11 @@ public class Board : Control
 
 	public int RevealTarget(Tuple<int,int> coord)
 	{
+		if (revealed[coord.Item1][coord.Item2])
+		{
+			return -1;
+		}
+
 		revealed[coord.Item1][coord.Item2] = true;
 		UpdateBoard();
 		return target_counts[coord.Item1][coord.Item2];
