@@ -127,6 +127,20 @@ public class CPU : Node
 						terminal.AddStaticLine("Scan for human heartbeats, reveals their locations.");
 						terminal.AddStaticLine("Range: 5x5 tiles from the center tile.");
 					}
+					else if (splitted_coms[1].Equals("lb"))
+					{
+						terminal.AddStaticLine("LB: Large Bomb");
+						terminal.AddStaticLine("Kills all target in its range.");
+						terminal.AddStaticLine("Range: a 2x2 cross from the upper center.");
+						terminal.AddStaticLine("|_|x|x|_|");
+						terminal.AddStaticLine("|x|X|x|x|");
+						terminal.AddStaticLine("|x|x|x|x|");
+						terminal.AddStaticLine("|_|x|x|_|");
+					}
+					else
+					{
+						terminal.AddStaticLine(invalid_arg);
+					}
 				}
 				return;
 			case "list":
@@ -137,7 +151,6 @@ public class CPU : Node
 					{
 						int amount = unit_amounts[type];
 						string unit_name = "";
-						//todo
 						switch(type)
 						{
 							case UnitType.HBS:
@@ -152,12 +165,14 @@ public class CPU : Node
 							case UnitType.AHBS:
 								unit_name = "AHBS";
 								break;
+							case UnitType.LB:
+								unit_name = "LB";
+								break;
 						}
 						terminal.AddStaticLine(amount + " unit(s) of : " + unit_name);
 					}
 				}
 				return;
-			//TODO: all the types of units
 			case "hbs":
 				ExecuteUnit(UnitType.HBS, lower_in);
 				return;
@@ -169,6 +184,9 @@ public class CPU : Node
 				return;
 			case "ahbs":
 				ExecuteUnit(UnitType.AHBS, lower_in);
+				return;
+			case "lb":
+				ExecuteUnit(UnitType.LB, lower_in);
 				return;
 		}
 
@@ -199,7 +217,6 @@ public class CPU : Node
 			terminal.AddStaticLine(invalid_arg);
 			return;
 		}
-		//TODO: Add unit effects
 		switch (unit_type)
 		{
 			case UnitType.HBS:
@@ -249,7 +266,6 @@ public class CPU : Node
 						}
 					}
 				}
-				
 				break;
 			case UnitType.AHBS:
 				for (int i = -2; i < 3; i++)
@@ -269,6 +285,31 @@ public class CPU : Node
 					}
 				}
 
+				break;
+			case UnitType.LB:
+				for (int i = -1; i < 3; i++)
+				{
+					for (int j = -1; j < 3; j++)
+					{
+						if ( !( (i == 2 && j == 2)||(i == 2 && j == -1)||(i == -1 && j == 2)||(i == -1 && j == -1) ) )
+						{
+							int x = coord_info.Item2 + i;
+							int y = coord_info.Item3 + j;
+							if (CoordInRange(x,y))
+							{
+								Tuple<bool, int> info_sb = display.board.KillAll(new Tuple<int,int>(x,y));
+								if (info_sb.Item1 && info_sb.Item2 != 0)
+								{
+									terminal.AddStaticLine("A large bomb has killed " + info_sb.Item2 + " target(s) at " + x + "," + y);
+								}
+								else if (info_sb.Item2 != 0)
+								{
+									terminal.AddStaticLine("A large bomb has killed " + info_sb.Item2 + " target(s) at an unknown location.");
+								}
+							}
+						}
+					}
+				}
 				break;
 		}
 		unit_amounts[unit_type] -= 1;

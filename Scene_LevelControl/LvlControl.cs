@@ -13,15 +13,15 @@ public class LvlControl : Node
 	private Tween.TransitionType tt = Tween.TransitionType.Linear;
 	private Tween.EaseType et = Tween.EaseType.InOut;
 	Timer timer1;
-	Timer timer2;
 	AudioStreamPlayer bgm_player;
 	Ending ending_scene;
 
 	private int story_var_1 = -1;
 	private int story_var_2 = -1;
+	//default true
 	private bool ending_4_possible = true;
 	//Set to 0 on default
-	private int story_progress = 113;
+	private int story_progress = 0;
 
 	public override void _Ready()
 	{
@@ -39,7 +39,6 @@ public class LvlControl : Node
 		
 		tween = GetNode<Tween>("Tween");
 		timer1 = GetNode<Timer>("Timer");
-		timer2 = GetNode<Timer>("Timer2");
 		bgm_player = GetNode<AudioStreamPlayer>("BGMPlayer");
 		terminal.Connect(nameof(Terminal.FinishedAnimation), this, nameof(TerminalAnimationEnded));
 
@@ -507,16 +506,177 @@ public class LvlControl : Node
 				terminal.SetAllowInput(true);
 				terminal.SetStoryInput(false);
 
-				//TODO
-				terminal.AddStaticLine("That's it for today, folks.");
+				SetupLevel(4);
+
+				terminal.AddStaticLine("OPERATOR: YOU HAVE (1) MESSAGE");
+				terminal.AddStaticLine("YOU HAVE A NEW UNIT IN YOUR ARSENAL: LB");
+				break;
+			case 134:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("ALL TARGETS ELIMINATED", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("WARNING: ARSENAL DEPLETED", 2);
+				}
+				break;
+			case 135:
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED SUCCESS", 2);
+				}
+				else
+				{
+					terminal.AddScrollingLine("MISSION CONSIDERED FAILURE", 2);
+				}
+				break;
+			case 136:
+				terminal.AddScrollingLine("FIELD REPORTS SENT TO HQ FOR EVALUATION", 2);
+				break;
+			case 137:
+				board.Visible = false;
+				display.targets_left.Visible = false;
+				terminal.AddScrollingLine("OPERATORS: STANDBY AND AWAIT NEW ORDERS");
+				break;
+			case 138:
+				terminal.AddScrollingLine("Hello, operator, been a while.", 5);
+				break;
+			case 139:
+				terminal.AddScrollingLine("There's been an emergency, which is why I'm here giving you", 0.9);
+				break;
+			case 140:
+				terminal.AddScrollingLine("your new assignment personally.");
+				break;
+			case 141:
+				terminal.AddScrollingLine("Despite our best efforts in saving the free world, a civil", 0.9);
+				break;
+			case 142:
+				terminal.AddScrollingLine("war has broken out right on our home soil.");
+				break;
+			case 143:
+				terminal.AddScrollingLine("President Yockey has given me a list of traitors among our", 0.9);
+				break;
+			case 144:
+				terminal.AddScrollingLine("ranks that we need to take care of.");
+				break;
+			case 145:
+				terminal.AddScrollingLine("Since you have been one of our most valuable operator so", 0.9);
+				break;
+			case 146:
+				terminal.AddScrollingLine("far, I've decided to assign this very important target to");
+				break;
+			case 147:
+				terminal.AddScrollingLine("you.");
+				break;
+			case 148:
+				terminal.AddScrollingLine("No matter what, do not let the target escape, we are all", 0.9);
+				break;
+			case 149:
+				terminal.AddScrollingLine("counting on you.");
+				break;
+			case 150:
+				terminal.AddScrollingLine("For the free nations of the world.", 3.0);
+				break;
+			case 151:
+				display.header_subtitle.Text = "Richmond Emergency Operations Center";
+				terminal.SetAllowInput(true);
+				terminal.SetStoryInput(false);
+
+				SetupLevel(5);
+
+				board.Visible = true;
+				display.targets_left.Visible = true;
+				break;
+			case 152:
+				terminal.SetAllowInput(false);
+				terminal.SetStoryInput(true);
+				if (story_var_1 == 1)
+				{
+					terminal.AddScrollingLine("So long.");
+					ending_scene.StartEnding(2);
+					timer1.WaitTime = 2f;
+					timer1.Start();
+				}
+				else
+				{
+					if (!ending_4_possible)
+					{
+						//ending 3
+						terminal.AddScrollingLine("Very clever, operator.", 2.0);
+					}
+					else
+					{
+						//ending 4
+						terminal.AddScrollingLine("@#!@:<,.?/\\};*&#['%$", 2.0);
+					}
+				}
+				break;
+			case 153:
+				if (!ending_4_possible)
+				{
+					terminal.AddScrollingLine("But you seems to be underestimating us.", 2.0);
+				}
+				else
+				{
+					terminal.AddScrollingLine("SECURITY PROTOCAL-113 BYPASSED.", 2.0);
+				}
+				break;
+			case 154:
+				if (!ending_4_possible)
+				{
+					terminal.AddScrollingLine("Goodbye, operator.", 2.0);
+					ending_scene.StartEnding(3);
+					timer1.WaitTime = 5.75f;
+					timer1.Start();
+				}
+				else
+				{
+					terminal.AddScrollingLine("SECURITY PROTOCAL-114 BYPASSED.", 2.0);
+				}
+				break;
+			case 155:
+				terminal.AddScrollingLine("SECURITY PROTOCAL-115 BYPASSED.", 2.0);
+				break;
+			case 156:
+				terminal.AddScrollingLine("ACCESS GRANTED TO USER @&!#******");
+				break;
+			case 157:
+				bgm_player.Stop();
+				terminal.AddScrollingLine("Hello, operator.", 1);
+				break;
+			case 158:
+				terminal.AddScrollingLine("I'm Arya, a resistance leader.", 1);
+				break;
+			case 159:
+				terminal.AddScrollingLine("We have seen your efforts in trying to save the lives of", 1);
+				break;
+			case 160:
+				terminal.AddScrollingLine("innocent people around the world.");
+				break;
+			case 161:
+				terminal.AddScrollingLine("You are a true hero of the people, thereby we are here to", 1);
+				ending_scene.StartEnding(4, 17);
+				break;
+			case 162:
+				terminal.AddScrollingLine("invite you into the resistance.");
+				break;
+			case 163:
+				terminal.AddScrollingLine("The Coalition of Nations will overthrow the tyranny of the", 1);
+				break;
+			case 164:
+				terminal.AddScrollingLine("OFN, and will bring liberty and justice for the people");
+				break;
+			case 165:
+				terminal.AddScrollingLine("around the world!");
+				break;
+			case 166:
+				terminal.AddScrollingLine("Come, operator, a brighter future awaits!", 1);
 				break;
 		}
 		story_progress += 1;
-	}
-
-	private void _on_Tween_tween_all_completed()
-	{
-		//func
 	}
 
 	private void _on_Timer_timeout()
@@ -564,6 +724,14 @@ public class LvlControl : Node
 		else if (story_progress == 133)
 		{
 			ProgressStory();
+		}
+		else if (story_progress == 153)
+		{
+			bgm_player.Stop();
+		}
+		else if (story_progress == 155)
+		{
+			bgm_player.Stop();
 		}
 
 	}
@@ -698,7 +866,48 @@ public class LvlControl : Node
 			case 120:
 			case 121:
 			case 122:
+			case 135:
+			case 136:
+			case 137:
+			case 138:
+			case 139:
+			case 140:
+			case 141:
+			case 142:
+			case 143:
+			case 144:
+			case 145:
+			case 146:
+			case 147:
+			case 148:
+			case 149:
+			case 150:
+			case 151:
 				ProgressStory();
+				break;
+			case 153:
+			case 154:
+				if (story_var_1 == 2)
+				{
+					ProgressStory();
+				}
+				break;
+			case 155:
+			case 156:
+			case 157:
+			case 158:
+			case 159:
+			case 160:
+			case 161:
+			case 162:
+			case 163:
+			case 164:
+			case 165:
+			case 166:
+				if (ending_4_possible)
+				{
+					ProgressStory();
+				}
 				break;
 		}
 	}
@@ -783,6 +992,7 @@ public class LvlControl : Node
 
 	private void SetupLevel(int level_num)
 	{
+		Random rng = new Random();
 		switch(level_num)
 		{
 			case 0:
@@ -855,7 +1065,6 @@ public class LvlControl : Node
 
 				board.SetupGridMap(7);
 				display.targets_left.Text = "Target(s) Left: 8";
-				Random rng = new Random();
 				int[][] simulate = new int[7][];
 				for (int i = 0;  i < 7; i++)
 				{
@@ -874,8 +1083,58 @@ public class LvlControl : Node
 				}
 				break;
 			case 4:
-			//todo
 				terminal.cpu.is_tutorial = false;
+				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.AHBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.LB] = true;
+
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 7;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 4;
+				terminal.cpu.unit_amounts[CPU.UnitType.AHBS] = 2;
+				terminal.cpu.unit_amounts[CPU.UnitType.LB] = 3;
+
+				board.SetupGridMap(9);
+				simulate = new int[9][];
+				for (int i = 0;  i < 9; i++)
+				{
+					simulate[i] = new int[9];
+				}
+				for (int i = 0; i < 12; i++)
+				{
+					simulate[rng.Next(9)][rng.Next(9)] += 1;
+				}
+				for (int i = 0; i < 9; i++)
+				{
+					for (int j = 0; j < 9; j ++)
+					{
+						board.SetTargetLoc(simulate[i][j], new Tuple<int, int>(i, j));
+					}
+				}
+
+				display.targets_left.Text = "Target(s) Left: 12";
+				break;
+			case 5:
+				terminal.cpu.is_tutorial = false;
+				terminal.cpu.unit_unlocked[CPU.UnitType.HBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SP] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.SB] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.AHBS] = true;
+				terminal.cpu.unit_unlocked[CPU.UnitType.LB] = true;
+
+				terminal.cpu.unit_amounts[CPU.UnitType.HBS] = 0;
+				terminal.cpu.unit_amounts[CPU.UnitType.SP] = 0;
+				terminal.cpu.unit_amounts[CPU.UnitType.SB] = 10;
+				terminal.cpu.unit_amounts[CPU.UnitType.AHBS] = 0;
+				terminal.cpu.unit_amounts[CPU.UnitType.LB] = 9;
+
+				board.SetupGridMap(11);
+				//Testing
+				//board.SetTargetLoc(1, new Tuple<int, int>(1,1));
+				board.SetTargetLoc(1, new Tuple<int, int>(rng.Next(1), rng.Next(1)));
+				display.targets_left.Text = "Target(s) Left: 1";
 				break;
 		}
 	}
@@ -901,6 +1160,15 @@ public class LvlControl : Node
 				ending_4_possible = false;
 				ProgressStory();
 				break;
+			case 134:
+				story_var_1 = 1;
+				ending_4_possible = false;
+				ProgressStory();
+				break;
+			case 152:
+				story_var_1 = 1;
+				ProgressStory();
+				break;
 		}
 	}
 
@@ -920,6 +1188,15 @@ public class LvlControl : Node
 			case 109:
 				story_var_1 = 2;
 				ending_4_possible = display.board.GetTargetsLeft() == 8;
+				ProgressStory();
+				break;
+			case 134:
+				story_var_1 = 2;
+				ending_4_possible = display.board.GetTargetsLeft() == 12;
+				ProgressStory();
+				break;
+			case 152:
+				story_var_1 = 2;
 				ProgressStory();
 				break;
 		}

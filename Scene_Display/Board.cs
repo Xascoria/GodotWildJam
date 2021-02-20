@@ -41,7 +41,6 @@ public class Board : Control
 				Tile new_tile = (Tile) tile_ref.Instance();
 				AddChild(new_tile);
 
-				//TODO: more font_size
 				switch(dimension)
 				{
 					case 3:
@@ -55,6 +54,12 @@ public class Board : Control
 						break;
 					case 7:
 						new_tile.SetFontSize(20);
+						break;
+					case 9:
+						new_tile.SetFontSize(18);
+						break;
+					case 11:
+						new_tile.SetFontSize(14);
 						break;
 				}
 

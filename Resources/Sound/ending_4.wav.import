@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ending_4.wav-a0b438a1a4993e4e77292ef62a79f556.sample"
+
+[deps]
+
+source_file="res://Resources/Sound/ending_4.wav"
+dest_files=[ "res://.import/ending_4.wav-a0b438a1a4993e4e77292ef62a79f556.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

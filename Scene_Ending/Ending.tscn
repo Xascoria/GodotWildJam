@@ -95,7 +95,7 @@ margin_right = 1120.0
 margin_bottom = 440.0
 custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-text = "- Chinese Fable"
+text = "Chinese Fable"
 align = 2
 valign = 1
 autowrap = true
@@ -104,9 +104,9 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 384.0
+margin_left = 320.0
 margin_top = 512.0
-margin_right = 896.0
+margin_right = 960.0
 margin_bottom = 592.0
 focus_mode = 0
 custom_styles/hover = SubResource( 5 )

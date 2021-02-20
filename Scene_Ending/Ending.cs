@@ -18,6 +18,9 @@ public class Ending : Node2D
 	private Dictionary<int, string> restart_txt = new Dictionary<int, string>()
 	{
 		{1, "Perhaps it's for the best?"},
+		{2, "Their side of the story will never be heard."},
+		{3, "You can't fight fate."},
+		{4, "For liberty and justice!"},
 	};
 
 	public override void _Ready()
@@ -36,7 +39,8 @@ public class Ending : Node2D
 		/* #endregion */
 
 		Setup();
-		//StartEnding(1);
+		//testing
+		//StartEnding(3);
 	}
 
 	private void Setup()
@@ -60,21 +64,61 @@ public class Ending : Node2D
 			
 			title.Text = "Nothing Much Happened";
 			quote.Text = "Fortunes can turn into misfortunes, and misfortunes can turn into fortunes.\nThe changes are elusive and unpredictable.";
-			quoter.Text = "- Chinese Fable";
-			restart_but.Text = restart_txt[ending_num];
+			quoter.Text = "Chinese Fable";
+
 			music_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/ending_1.wav");
 			music_player.Play();
+
+			tween.InterpolateProperty(background, "modulate:a", 0, 1, 4.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, (float) time_before_fade);
+			tween.InterpolateProperty(music_player, "volume_db", -80, 0, 6);
+			tween.Start();
 
 			break;
 
 			case 2:
 
+			title.Text = "A Gruesome Suicide";
+			quote.Text = "Everything in nature is lyrical in its ideal essence, tragic in its fate, \nand comic in its existence.";
+			quoter.Text = "George Santayana";
+
+			music_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/ending_2.wav");
+			music_player.VolumeDb = 0;
+			music_player.Play();
+			timer.WaitTime = 2f;
+			timer.Start();
+
+			break;
+
+			case 3:
+
+			title.Text = "Betrayed by the Country He Loves";
+			quote.Text = "In trying to defend everything he defended nothing.";
+			quoter.Text = "Frederick the Great";
+			
+			music_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/ending_3.wav");
+			music_player.VolumeDb = 0;
+			music_player.Play();
+			timer.WaitTime = 5.75f;
+			timer.Start();
+
+			break;
+
+			case 4:
+
+			title.Text = "We Fight On";
+			quote.Text = "Injustice anywhere is a threat to justice everywhere.";
+			quoter.Text = "Martin Luther King Jr.";
+
+			music_player.Stream = GD.Load<AudioStream>("res://Resources/Sound/ending_4.wav");
+			music_player.VolumeDb = 0;
+			music_player.Play();
+			tween.InterpolateProperty(background, "modulate:a", 0, 1, 4.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, (float) time_before_fade);
+			tween.Start();
+
 			break;
 		}
+		restart_but.Text = restart_txt[ending_num];
 		ending_num_label.Text = "Ending " + ending_num + " of 4";
-		tween.InterpolateProperty(background, "modulate:a", 0, 1, 4.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, (float) time_before_fade);
-		tween.InterpolateProperty(music_player, "volume_db", -80, 0, 6);
-		tween.Start();
 	}
 
 	private int progress_num = 0;
@@ -83,7 +127,7 @@ public class Ending : Node2D
 		switch(progress_num)
 		{
 			case 0:
-				tween.InterpolateProperty(title, "modulate:a", 0, 1, 2.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, 1.5f);
+				tween.InterpolateProperty(title, "modulate:a", 0, 1, 2.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, 2f);
 				break;
 			case 1:
 				tween.InterpolateProperty(quote, "modulate:a", 0, 1, 3.0f, Tween.TransitionType.Linear, Tween.EaseType.InOut, 1.5f);
@@ -101,14 +145,53 @@ public class Ending : Node2D
 		}	
 	}
 
+	
+
 	private void _on_Timer_timeout()
 	{
-		switch(progress_num)
+		if (ending_num == 1)
 		{
-			case 3:
+			switch(progress_num)
+			{
+				case 3:
+					restart_but.Visible = true;
+					ending_num_label.Visible = true;
+					break;
+			}
+		}
+		else if (ending_num == 2)
+		{
+			if (progress_num == 0)
+			{
+				background.Modulate = new Color(1,1,1,1);
+				_on_Tween_tween_all_completed();
+			}
+			else if (progress_num == 3)
+			{
 				restart_but.Visible = true;
 				ending_num_label.Visible = true;
-				break;
+			}
+		}
+		else if (ending_num == 3)
+		{
+			if (progress_num == 0)
+			{
+				background.Modulate = new Color(1,1,1,1);
+				_on_Tween_tween_all_completed();
+			}
+			else if (progress_num == 3)
+			{
+				restart_but.Visible = true;
+				ending_num_label.Visible = true;
+			}
+		}
+		else
+		{
+			if (progress_num == 3)
+			{
+				restart_but.Visible = true;
+				ending_num_label.Visible = true;
+			}
 		}
 	}
 
@@ -122,13 +205,17 @@ public class Ending : Node2D
 		restart_but.Text = "RESTART";
 	}
 
-
 	private void _on_Button_mouse_exited()
 	{
 		restart_but.Text = restart_txt[ending_num];
 	}
 
 }
+
+
+
+
+
 
 
 

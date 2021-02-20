@@ -10,8 +10,7 @@ public class Tile : Panel
 		content_text = GetNode<Label>("Content");
 		coord_text = GetNode<Label>("Coord");
 
-		//Testing
-		SetFontSize(20);
+		//SetFontSize(20);
 	}
 
 	public void SetFontSize(int size)
