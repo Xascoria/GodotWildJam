@@ -5,7 +5,7 @@ public class Terminal : Panel
 {
 	private const int max_line_nums = 24;
 	private int line_taken = 0;
-	private int char_per_sec = 15; 
+	private int char_per_sec = 18; 
 
 	private bool is_animating = false;
 	private bool allow_input = true;

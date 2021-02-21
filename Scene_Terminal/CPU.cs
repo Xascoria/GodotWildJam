@@ -95,7 +95,14 @@ public class CPU : Node
 				if (splitted_coms.Length == 1)
 				{
 					//TODO get help section here
-					terminal.AddStaticLine(invalid_arg);
+					//terminal.AddStaticLine(invalid_arg);
+					terminal.AddStaticLine("List of Commands:");
+					terminal.AddStaticLine("list: Provide a list of units currently in your arsenal");
+					terminal.AddStaticLine("[unit_name] [coord]: Execute a unit at that location");
+					terminal.AddStaticLine("help [unit_name]: Gives information about that unit");
+					terminal.AddStaticLine("toggle s/toggle c: Toggle between views of coords and");
+					terminal.AddStaticLine("situation of the field");
+					terminal.AddStaticLine("reset: Reset simulated field operation");
 					return;
 				}
 				else
