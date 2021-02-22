@@ -501,6 +501,8 @@ public class LvlControl : Node
 				timer1.Start();
 				break;
 			case 133:
+				board.Visible = true;
+				display.targets_left.Visible = true;
 				display.header_subtitle.Text = "Jakarta Operations";
 				terminal.ClearTerminal();
 				terminal.SetAllowInput(true);
