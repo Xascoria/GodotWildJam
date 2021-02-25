@@ -40,7 +40,7 @@ public class Ending : Node2D
 
 		Setup();
 		//testing
-		//StartEnding(3);
+		//StartEnding(4);
 	}
 
 	private void Setup()

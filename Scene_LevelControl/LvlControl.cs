@@ -805,7 +805,8 @@ public class LvlControl : Node
 				ProgressStory();
 				break;
 			case 33:
-				terminal.AddStaticLine("Note: you can use the command \"help\" to display a list of commands");
+				terminal.AddStaticLine("Note: you can use the command \"help\" to display a list of");
+				terminal.AddStaticLine("commands");
 				terminal.SetStoryInput(false);
 				terminal.SetAllowInput(true);
 				break;
